@@ -1,0 +1,28 @@
+{
+  "name": "puppeteer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "axios": "^1.4.0",
+    "googleapis": "^105.0.0",
+    "papaparse": "^5.4.1",
+    "proxy-chain": "^2.3.0",
+    "puppeteer": "^20.9.0",
+    "puppeteer-core": "^21.3.8",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "forever": "^4.0.3",
+    "nodemon": "^3.0.1"
+  }
+}
