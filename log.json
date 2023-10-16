@@ -1,59 +1,52 @@
-{
-  "entries": [
-    {
-      "iTAVhaayb0@gmail.com": {
-        "name": "vgcYmuFiLn",
-        "type": ".pet-cat",
-        "gender": ".pet-male",
-        "birthDate": "01/01/2022",
-        "email": "OYjfToHNrk@gmail.com",
-        "suburb": "Melbourne, 3000, VIC",
-        "total": "$27.37"
-      }
-    },
-    {
-      "KByLGA3k7V@gmail.com": {
-        "name": "vgcYmuFiLn",
-        "type": ".pet-cat",
-        "gender": ".pet-male",
-        "birthDate": "01/01/2022",
-        "email": "OYjfToHNrk@gmail.com",
-        "suburb": "Melbourne, 3000, VIC",
-        "total": "$27.37"
-      }
-    },
-    {
-      "UBc592hiZT@gmail.com": {
-        "name": "vgcYmuFiLn",
-        "type": ".pet-cat",
-        "gender": ".pet-male",
-        "birthDate": "01/01/2022",
-        "email": "OYjfToHNrk@gmail.com",
-        "suburb": "Melbourne, 3000, VIC",
-        "total": "$27.37"
-      }
-    },
-    {
-      "KSzRkXvTLR@gmail.com": {
-        "name": "vgcYmuFiLn",
-        "type": ".pet-cat",
-        "gender": ".pet-male",
-        "birthDate": "01/01/2022",
-        "email": "OYjfToHNrk@gmail.com",
-        "suburb": "Melbourne, 3000, VIC",
-        "total": "$27.37"
-      }
-    },
-    {
-      "OYjfToHNrk@gmail.com": {
-        "name": "vgcYmuFiLn",
-        "type": ".pet-cat",
-        "gender": ".pet-male",
-        "birthDate": "01/01/2022",
-        "email": "OYjfToHNrk@gmail.com",
-        "suburb": "Melbourne, 3000, VIC",
-        "total": "$27.37"
-      }
-    }
-  ]
-}
+[
+  {
+    "name": "r7EHHFdTgC",
+    "type": "Cat",
+    "gender": "Female",
+    "breed": "Abyssinian Cat",
+    "birthDate": "01/01/2022",
+    "email": "R0tFzRXUK8@gmail.com",
+    "suburb": "3000",
+    "total": "100"
+  },
+  {
+    "name": "kjXYQ5y3QE",
+    "type": "Dog",
+    "gender": "Male",
+    "breed": "Abaco Potcake",
+    "birthDate": "01/01/2022",
+    "email": "Dc05hbJjYK@gmail.com",
+    "suburb": "3000",
+    "total": "100"
+  },
+  {
+    "name": "yzIEy5kOnL",
+    "type": "Cat",
+    "gender": "Female",
+    "breed": "Aegean",
+    "birthDate": "01/01/2022",
+    "email": "edohk7QJft@gmail.com",
+    "suburb": "3000",
+    "total": "100"
+  },
+  {
+    "name": "FJVA1h9cLR",
+    "type": "Dog",
+    "gender": "Female",
+    "breed": "Aberdeen Terrier",
+    "birthDate": "01/01/2022",
+    "email": "fJjEuEBj9q@gmail.com",
+    "suburb": "3000",
+    "total": "100"
+  },
+  {
+    "name": "sQnpudSgCj",
+    "type": "Cat",
+    "gender": "Female",
+    "breed": "Alley Cat",
+    "birthDate": "01/01/2022",
+    "email": "BEfc43rndE@gmail.com",
+    "suburb": "3000",
+    "total": "100"
+  }
+]
