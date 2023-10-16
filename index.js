@@ -12,10 +12,17 @@ let logData = {
   entries: [],
 };
 
-const logToFile = (message) => {
-  const formattedMessage = `${new Date().toISOString()} - ${message}\n`;
-  fs.appendFileSync("logs.txt", formattedMessage);
-};
+async function typeInput(page, selector, value) {
+  await page.waitForSelector(selector);
+  await page.click(selector, { clickCount: 3 });
+  await page.keyboard.press("Backspace");
+  await page.type(selector, value);
+}
+
+async function clickElement(page, selector) {
+  await page.waitForSelector(selector);
+  await page.click(selector);
+}
 
 function logToJSON(key, value) {
   const entry = {};
@@ -44,20 +51,15 @@ async function run() {
     executablePath: executablePath(),
       headless: false,
       devtools: true,
-    //args: ["--proxy-server=brd.superproxy.io:9222"],
     });
 
-    const context = await browser.createIncognitoBrowserContext();
-
-    //const page = await browser.newPage();
+    const context = await browser.createIncognitoBrowserContext({
+      ignoreHTTPSErrors: true,
+      
+    });
     const page = await context.newPage();
-    //await page.setUserAgent(
-    //   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-    // );
-    // await page.authenticate({
-    //   username: "brd-customer-hl_c03d3b67-zone-scraping_browser",
-    //   password: "ltoke16615rk",
-    // });
+   // const page = await browser.newPage();
+
     page.setDefaultNavigationTimeout(0);
     await page.authenticate({
       username: "quotetool",
@@ -65,122 +67,114 @@ async function run() {
     });
 
     await page.goto("https://quick-quote-staging.knose.com.au/details");
+
+
+
+
+    await page.waitForTimeout(10000);
+
     let dataInput = {};
-    for (let i = 0; i < 5; i++) {
-      let breed = breeds[i];
-      console.log("breed", breed.filterGroup);
-      await page.waitForSelector('input[name="pet_name"]');
 
-      // pet name
+    for (let breed of breeds) {
+      console.log("Processing breed:", breed.filterGroup);
+  
+      // Pet name
       const pet_name = generateRandomString(10);
-      await page.click('input[name="pet_name"]', { clickCount: 3 });
-      await page.keyboard.press("Backspace");
-      await page.type('input[name="pet_name"]', pet_name);
+      await typeInput(page, 'input[name="pet_name"]', pet_name);
       dataInput.name = pet_name;
-
-      console.log("\n");
-
-      //     // pet type
+  
+      // Pet type
       const pet_type = breed.filterGroup === "Dog" ? ".pet-dog" : ".pet-cat";
-
-      console.log("clicking... pet type", pet_type);
-      await page.waitForSelector(pet_type);
-      await page.click(pet_type);
-      console.log("pet type done...");
+      await clickElement(page, pet_type);
       dataInput.type = pet_type;
-
-      console.log("\n");
-
-      //     // pet gender
-      const pet_gender = [".pet-male", ".pet-female"].sort(
-        () => Math.random() - 0.5
-      )[0];
-      console.log("clicking... pet gender", pet_gender);
-      await page.waitForSelector(pet_gender);
-      await page.click(pet_gender);
-      console.log("pet gender done...");
-      dataInput.gender = pet_gender;
-
-      //     console.log('\n')
-
-      // pet breed
-      await page.waitForTimeout(3000);
-      // const breed = pet_type === '.pet-dog' ? 'Persian Greyhound' : 'Colorpoint Persian'
-      //const breed = pet_type === '.pet-dog' ? generateRandomBreed('Dog').displayName : generateRandomBreed('Cat').displayName
-      const breedName = breed.displayName;
-
-      await page.waitForSelector('.css-1pcexqc-container.auto-suggest-breed');
-      await page.click('.css-1pcexqc-container.auto-suggest-breed');
-      await page.type('#react-select-2-input', breedName);
+  
+      // Pet gender
+      const pet_gender = [".pet-male", ".pet-female"].sort(() => Math.random() - 0.5)[0];
+      await clickElement(page, pet_gender);
+      dataInput.gender = pet_gender === '.pet-male' ? "Male" : "Female";
+  
+      // Breed selection
+      await clickElement(page, '.css-1pcexqc-container.auto-suggest-breed');
+      await page.type('.css-1hwfws3', breed.displayName);
       await page.waitForTimeout(3000);
       await page.keyboard.press('ArrowDown');
-      await page.waitForTimeout(3000);
       await page.keyboard.press('Enter');
-      console.log("\n");
-
-      //     // pet dob
-      const pet_birth_date = "01/01/2022";
-      await page.click('input[name="pet_birth_date"]', { clickCount: 3 });
-      await page.keyboard.press("Backspace");
-      await page.type('input[name="pet_birth_date"]', pet_birth_date);
-      dataInput.birthDate = pet_birth_date;
-      // email
-      const owner_email = generateRandomString(10) + "@gmail.com";
-      await page.click('input[name="owner_email"]', { clickCount: 3 });
-      await page.keyboard.press("Backspace");
-      await page.type('input[name="owner_email"]', owner_email);
-      dataInput.email = owner_email;
-
+      dataInput.breed = await page.evaluate(() => document.querySelector('.css-1pcexqc-container.auto-suggest-breed').value);
   
-      await page.type('input[name="suburb"]', "3000");
-      await page.waitForTimeout(3000);
+      // Pet DOB
+      await typeInput(page, 'input[name="pet_birth_date"]', "01/01/2022");
+      dataInput.birthDate = "01/01/2022";
+  
+      // Email
+      const owner_email = generateRandomString(10) + "@gmail.com";
+      await typeInput(page, 'input[name="owner_email"]', owner_email);
+      dataInput.email = owner_email;
+      await page.waitForTimeout(2000);
+  
+      // Suburb
+      await typeInput(page, 'input[name="suburb"]', "3000");
+      await page.waitForTimeout(2000);
       await page.keyboard.press("ArrowDown");
       await page.keyboard.press("Enter");
-
-      // click btn btn-primary class
-      await page.click(".btn.btn-primary");
-
-      // value of suburb
-      await page.waitForSelector("#suburb");
-      const suburb = await page.evaluate(
-        () => document.querySelector("#suburb").value
-      );
-      dataInput.suburb = suburb;
-
-      // wait for btn-back class
-      console.log("looking for btn back");
-      console.log(dataInput);
+  
+      // Proceed
+      await clickElement(page, ".btn.btn-primary");
+  
+      // Fetch suburb value
+      dataInput.suburb = await page.evaluate(() => document.querySelector("#suburb").value);
+  
+      // Wait for further navigation
       await page.waitForTimeout(5000);
-      await page.waitForSelector(".btn-back");
-      console.log("clicking back");
-      // wait 1 sec
-      await page.waitForTimeout(1000);
+  
+      // Extract and log pricing information
+      await page.waitForSelector(".big-money");
+      dataInput.total = await page.evaluate(() => document.querySelector(".big-money").textContent);
+      logToJSON(owner_email, dataInput);
+  
+      // Navigate back
+      await clickElement(page, ".btn-back");
+  }
+    //await browser.close()
+    saveLogToJSONFile();
 
-      // get the text content of big-money class
-      const big_money = await page.evaluate(
-        () => document.querySelector(".big-money").textContent
-      );
-      console.log("======", big_money, "======");
-      dataInput.total = big_money;
-      logToJSON("data", dataInput);
+   const jsonData = fs.readFileSync('log.json', 'utf8')
+    const data = JSON.parse(jsonData)
+    let rows = [];
 
-      // then click
-      await page.click(".btn-back");
-      console.log("done!");
+// Header
+rows.push(["ID", "Name", "Type", "Gender", "Birth Date", "Email", "Suburb", "Total"]);
+
+// Extract entries
+for (let entry of data.entries) {
+    for (let key in entry) {
+        rows.push([
+            key,
+            entry[key].name,
+            entry[key].type,
+            entry[key].gender,
+            entry[key].birthDate,
+            entry[key].email,
+            entry[key].suburb,
+            entry[key].total
+        ]);
     }
+}
+
+       const response = await fetch('https://eoi4m9a8tqx7b0j.m.pipedream.net', {
+      method: 'POST',
+      body: JSON.stringify(rows),
+      headers: { 'Content-Type': 'application/json' },
+    })
+
+    console.log(response)
+
+
   } catch (e) {
     console.log(e);
   } finally {
     if (browser) {
-      await browser.close()
+      // await browser.close()
     }
-
-    /// save log to json file
-    saveLogToJSONFile();
-    // send log to google sheet 
-    // sendLogToGoogleSheet();
-
-     
   }
 }
 
